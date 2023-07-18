@@ -43,7 +43,10 @@ class MeterController extends Controller
     {
         $this->authorize('create', Meter::class);
 
-        return view('meter.create');
+        //Default of current day
+        $currentDate = today()->toDateString();
+
+        return view('meter.create', ['currentDate' => $currentDate]);
     }
 
     /**

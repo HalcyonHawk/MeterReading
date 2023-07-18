@@ -28,3 +28,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::resource('meter', 'MeterController');
     Route::resource('meter.reading', 'MeterReadingController')->except('index', 'show');
 });
+
+Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

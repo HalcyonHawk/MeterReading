@@ -41,4 +41,12 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    /**
+     * A user has many meter readings
+     */
+    public function meterReadings()
+    {
+        return $this->hasMany('App\MeterReading', 'user_id', 'id');
+    }
 }

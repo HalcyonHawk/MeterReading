@@ -24,7 +24,9 @@ class UpdateMeterRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'type' => ['required'],
+            'eac' => ['required', 'interger'],
+            'install_date' => ['required', 'date'],
         ];
     }
 }

@@ -24,7 +24,9 @@ class UpdateMeterReadingRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'date' => ['required', 'date'],
+            //Validate that meter reading being submitted is within 25% of an estimated reading
+            'reading' => ['required', 'interger', new WithinEstimatedRange($estimatedReading)],
         ];
     }
 }

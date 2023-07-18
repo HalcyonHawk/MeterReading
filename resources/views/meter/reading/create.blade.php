@@ -6,26 +6,38 @@
 <div class="card">
     <div class="card-header"><h3>Add Meter Reading</h3></div>
     <div class="card-body">
-        <form method="POST" action="{{ route('meter.reading.store', ['meter' => $meter->meter->meter_id]) }}">
+        <form method="POST" action="{{ route('meter.reading.store', ['meter' => $meterId]) }}">
             @csrf
-            <input type="hidden" name="meter_id" value="{{ $meter->meter_id }}">
+            <input type="hidden" name="meter_id" value="{{ $meterId }}">
             <input type="hidden" name="user_id">
 
-            <div class="form-group row">
-                <label for="reading" class="col-md-4 col-form-label text-md-right">{{ __('Meter Reading Value') }}
+            <div class="row mb-3">
+                <label for="reading" class="col-md-4 col-form-label text-md-end">{{ __('Meter Reading Value') }}
                     <span style="color: #FF0000"> *</span></label>
 
                 <div class="col-md-6">
-                    <input type="numer" class="form-control" name="reading" value="{{ old('reading') }}" required autofocus>
+                    <input id="reading" type="text" class="form-control @error('reading') is-invalid @enderror" name="reading" value="{{ old('reading') }}" required autofocus>
+
+                    @error('reading')
+                        <span class="invalid-feedback" role="alert">
+                            <strong>{{ $message }}</strong>
+                        </span>
+                    @enderror
                 </div>
             </div>
 
-            <div class="form-group row">
-                <label for="date" class="col-md-4 col-form-label text-md-right">{{ __('Date') }}
+            <div class="row mb-3">
+                <label for="date" class="col-md-4 col-form-label text-md-end">{{ __('Date') }}
                     <span style="color: #FF0000"> *</span></label>
 
                 <div class="col-md-6">
-                    <input id="date" type="date" class="form-control" name="date" value="{{ $currentDate }}" required>
+                    <input id="date" type="date" class="form-control @error('date') is-invalid @enderror" name="date" value="{{ old('date') }}" required>
+
+                    @error('date')
+                        <span class="invalid-feedback" role="alert">
+                            <strong>{{ $message }}</strong>
+                        </span>
+                    @enderror
                 </div>
             </div>
 

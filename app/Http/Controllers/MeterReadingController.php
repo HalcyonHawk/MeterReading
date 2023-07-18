@@ -27,7 +27,9 @@ class MeterReadingController extends Controller
     {
         $this->authorize('create', MeterReading::class);
 
-        return view('meter.reading.create');
+        $currentDate = today()->toDateString();
+
+        return view('meter.reading.create', ['meterId' => $merterId, 'currentDate' => $currentDate]);
     }
 
     /**
@@ -61,14 +63,14 @@ class MeterReadingController extends Controller
      * @param  \App\Models\MeterReading  $meterReading
      * @return \Illuminate\Http\Response
      */
-    public function show($meterId, MeterReading $meterReading)
-    {
-        $this->authorize('view', MeterReading::class);
+    // public function show($meterId, MeterReading $meterReading)
+    // {
+    //     $this->authorize('view', MeterReading::class);
 
-        $meterReading = MeterReading::where('deleted_at', null)->find($meterReading);
+    //     $meterReading = MeterReading::where('deleted_at', null)->find($meterReading);
 
-        return view('meter.reading.show', ['meter' => $meterId, 'meterReading' => $meterReading]);
-    }
+    //     return view('meter.reading.show', ['meter' => $meterId, 'meterReading' => $meterReading]);
+    // }
 
     /**
      * Show the form for editing the specified resource.
@@ -82,7 +84,7 @@ class MeterReadingController extends Controller
 
         $meterReading = MeterReading::where('deleted_at', null)->find($meterReading);
 
-        return view('meter.reading.edit', ['meter' => $meterId, 'meterReading' => $meterReading]);
+        return view('meter.reading.edit', ['meterId' => $meterId, 'meterReading' => $meterReading]);
     }
 
     /**
@@ -109,7 +111,7 @@ class MeterReadingController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Soft delete the specified resource from storage.
      *
      * @param  \App\Models\MeterReading  $meterReading
      * @return \Illuminate\Http\Response

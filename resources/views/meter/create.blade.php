@@ -9,26 +9,38 @@
         <form method="POST" action="{{ route('meter.store') }}">
             @csrf
 
-            <div class="form-group row">
-                <label for="identifier" class="col-md-4 col-form-label text-md-right">{{ __('Identifier (MPXN)') }}
+            <div class="row mb-3">
+                <label for="identifier" class="col-md-4 col-form-label text-md-end">{{ __('Identifier (MPXN)') }}
                     <span style="color: #FF0000"> *</span></label>
 
                 <div class="col-md-6">
-                    <input type="text" id="identifier" class="form-control" name="identifier" value="{{ old('identifier') }}" required autofocus>
+                    <input id="identifier" type="text" class="form-control @error('identifier') is-invalid @enderror" name="identifier" value="{{ old('identifier') }}" required autofocus>
+
+                    @error('identifier')
+                        <span class="invalid-feedback" role="alert">
+                            <strong>{{ $message }}</strong>
+                        </span>
+                    @enderror
                 </div>
             </div>
 
-            <div class="form-group row">
-                <label for="install_date" class="col-md-4 col-form-label text-md-right">{{ __('Install Date') }}
+            <div class="row mb-3">
+                <label for="install_date" class="col-md-4 col-form-label text-md-end">{{ __('Date') }}
                     <span style="color: #FF0000"> *</span></label>
 
                 <div class="col-md-6">
-                    <input id="install_date" type="date" class="form-control" name="install_date" value="{{ $currentDate }}" required>
+                    <input id="install_date" type="date" class="form-control @error('install_date') is-invalid @enderror" name="install_date" value="{{ old('install_date') }}" required>
+
+                    @error('install_date')
+                        <span class="invalid-feedback" role="alert">
+                            <strong>{{ $message }}</strong>
+                        </span>
+                    @enderror
                 </div>
             </div>
 
-            <div class="form-group row">
-                <label for="type" class="col-md-4 col-form-label text-md-right">{{ __('Meter Type') }}
+            <div class="row mb-3">
+                <label for="type" class="col-md-4 col-form-label text-md-end">{{ __('Meter Type') }}
                     <span style="color: #FF0000"> *</span></label>
 
                 <div class="col-md-6">
@@ -38,15 +50,27 @@
                         <option value="ELECTRIC">Eletric</option>
                         <option value="GAS">Gas</option>
                     </select>
+
+                    @error('type')
+                        <span class="invalid-feedback" role="alert">
+                            <strong>{{ $message }}</strong>
+                        </span>
+                    @enderror
                 </div>
             </div>
 
-            <div class="form-group row">
-                <label for="identifier" class="col-md-4 col-form-label text-md-right">{{ __('Estimated Annual Consumption') }}
+            <div class="row mb-3">
+                <label for="eac" class="col-md-4 col-form-label text-md-end">{{ __('Estimated Annual Consumption') }}
                     <span style="color: #FF0000"> *</span></label>
 
                 <div class="col-md-6">
-                    <input type="number" min="2000" max="8000" id="eac" class="form-control" name="eac" value="{{ old('eac') }}" required autofocus>
+                    <input id="eac" type="number" min="2000" max="8000" class="form-control @error('eac') is-invalid @enderror" name="eac" value="{{ old('eac') }}" required>
+
+                    @error('eac')
+                        <span class="invalid-feedback" role="alert">
+                            <strong>{{ $message }}</strong>
+                        </span>
+                    @enderror
                 </div>
             </div>
 

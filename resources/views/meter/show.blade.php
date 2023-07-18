@@ -49,16 +49,11 @@
 
             <form action={{ route('meter.estimated', ['meter' => $meter->meter_id]) }}>
                 <div class="form-group">
-                    <label for="start_date">Dates</label>
+                    <label for="start_date">Date</label>
 
                     <div class="row">
                         <div class="col-md-6">
-                            <label for="dateFrom">From</label>
-                            <input type="date" class="form-control" name="dateFrom" value="{{ request('dateFrom') }}">
-                        </div>
-                        <div class="col-md-6">
-                            <label for="dateTo">To</label>
-                            <input type="date" class="form-control" name="dateTo" value="{{ request('dateTo') }}">
+                            <input type="date" class="form-control" name="date" value="{{ request('date') }}">
                         </div>
                     </div>
                 </div>

@@ -49,6 +49,7 @@ class ProcessCSVFile implements ShouldQueue
                         'reading' => $data[0],
                         'meter_id' => $data[1],
                         'date' => $data[2],
+                        'user_id' => $data[3], //Reading must be linked to a user
                     ]);
                 } else {
                     // Store the invalid entry
@@ -59,11 +60,9 @@ class ProcessCSVFile implements ShouldQueue
             fclose($handle);
         }
 
-        // Optionally, you can perform additional actions with the invalid entries if needed
-
-        // For example, you can log the invalid entries or send a notification
+        //Log invalid entries
         if (count($invalidEntries) > 0) {
-            $message = 'The following lines are invalid: ' . implode(', ', array_keys($invalidEntries));
+            $message = 'Invalid entries: ' . implode(', ', array_keys($invalidEntries));
         } else {
             $message = 'All entries were successfully imported.';
         }
