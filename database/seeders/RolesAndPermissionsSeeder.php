@@ -4,6 +4,10 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 
+use App\Models\Permission;
+use App\Models\Role;
+use Illuminate\Support\Facades\DB;
+
 class RolesAndPermissionsSeeder extends Seeder
 {
     /**
@@ -32,7 +36,7 @@ class RolesAndPermissionsSeeder extends Seeder
         $userRoleId = Role::insertGetId(['name' => 'user']);
 
         // Link roles and permissions
-        DB::table('role_permissions')->insert([
+        DB::table('permission_role')->insert([
             ['role_id' => $adminRoleId, 'permission_id' => $createMeterPermId],
             ['role_id' => $adminRoleId, 'permission_id' => $updateMeterPermId],
             ['role_id' => $adminRoleId, 'permission_id' => $deleteMeterPermId],

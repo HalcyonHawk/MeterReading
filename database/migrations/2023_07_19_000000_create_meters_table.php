@@ -15,10 +15,10 @@ class CreateMetersTable extends Migration
     {
         Schema::create('meters', function (Blueprint $table) {
             $table->id('meter_id');
-            $table->int('identifier');
+            $table->integer('identifier');
             $table->date('install_date');
             $table->enum('type', ['ELECTRIC', 'GAS']);
-            $table->int('eac'); // Estimated annual consumtion
+            $table->integer('eac'); // Estimated annual consumtion
         });
     }
 

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Meter;
+use App\Models\MeterReading;
 use App\Http\Requests\StoreMeterRequest;
 use App\Http\Requests\UpdateMeterRequest;
 use App\Models\User;
@@ -27,7 +28,7 @@ class MeterController extends Controller
      */
     public function index()
     {
-        $meters = Meter::get()->paginate(20);
+        $meters = Meter::paginate(20);
 
         return view('meter.index', [
             'meters' => $meters,

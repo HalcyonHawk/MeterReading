@@ -22,7 +22,7 @@
 
                     @error('reading')
                         <span class="invalid-feedback" role="alert">
-                            <strong>{{ $message }}</strong>
+                            <strong>{{ $errors->first('reading') }}</strong>
                         </span>
                     @enderror
                 </div>
@@ -37,7 +37,7 @@
 
                     @error('date')
                         <span class="invalid-feedback" role="alert">
-                            <strong>{{ $message }}</strong>
+                            <strong>{{ $errors->first('date') }}</strong>
                         </span>
                     @enderror
                 </div>

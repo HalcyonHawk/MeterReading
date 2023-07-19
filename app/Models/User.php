@@ -21,6 +21,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'role_id'
     ];
 
     /**
@@ -43,10 +44,34 @@ class User extends Authenticatable
     ];
 
     /**
+     * Check if user has a role that contains the needed permission.
+     * Used by UserPolicy
+     *
+     * @param string|collection $role Role being checked for
+     *
+     * @return bool Return true if user has the requried role
+     */
+    public function hasRole($role)
+    {
+        if (is_string($role)) {
+            return $this->role->contains('name', $role);
+        }
+        return !! $role->intersect($this->role)->count();
+    }
+
+    /**
      * A user has many meter readings
      */
     public function meterReadings()
     {
         return $this->hasMany('App\MeterReading', 'user_id', 'id');
+    }
+
+    /**
+     * A user has a role
+     */
+    public function role()
+    {
+        return $this->hasOne('App\Role', 'role_id', 'role_id');
     }
 }

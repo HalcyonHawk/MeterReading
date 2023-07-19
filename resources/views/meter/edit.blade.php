@@ -19,7 +19,7 @@
 
                     @error('identifier')
                         <span class="invalid-feedback" role="alert">
-                            <strong>{{ $message }}</strong>
+                            <strong>{{ $errors->first('identifier') }}</strong>
                         </span>
                     @enderror
                 </div>
@@ -34,7 +34,7 @@
 
                     @error('install_date')
                         <span class="invalid-feedback" role="alert">
-                            <strong>{{ $message }}</strong>
+                            <strong>{{ $errors->first('install_date') }}</strong>
                         </span>
                     @enderror
                 </div>
@@ -52,7 +52,7 @@
 
                     @error('type')
                         <span class="invalid-feedback" role="alert">
-                            <strong>{{ $message }}</strong>
+                            <strong>{{ $errors->first('type') }}</strong>
                         </span>
                     @enderror
                 </div>
@@ -67,7 +67,7 @@
 
                     @error('eac')
                         <span class="invalid-feedback" role="alert">
-                            <strong>{{ $message }}</strong>
+                            <strong>{{ $errors->first('eac') }}</strong>
                         </span>
                     @enderror
                 </div>

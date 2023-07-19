@@ -4,6 +4,8 @@ namespace App\Policies;
 
 use App\Models\MeterReading;
 use App\Models\User;
+use App\Models\Permission;
+
 use Illuminate\Auth\Access\HandlesAuthorization;
 
 class MeterReadingPolicy

@@ -15,9 +15,11 @@ class CreateMeterReadingsTable extends Migration
     {
         Schema::create('meter_readings', function (Blueprint $table) {
             $table->id('meter_reading_id');
-            $table->foreign('meter_id')->references('meter_id')->on('meters'); //Reading belongs to meter
-            $table->foreign('user_id')->references('id')->on('users'); //Reading belongs to a user
-            $table->int('reading');
+            $table->integer('meter_id');
+            $table->integer('user_id');
+            //$table->foreign('meter_id')->references('meter_id')->on('meters'); //Reading belongs to meter
+            //$table->foreign('user_id')->references('id')->on('users'); //Reading belongs to a user
+            $table->integer('reading');
             $table->date('date');
             $table->softDeletes(); //Soft delete to keep record
         });
