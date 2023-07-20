@@ -54,9 +54,9 @@ class User extends Authenticatable
     public function hasRole($role)
     {
         if (is_string($role)) {
-            return $this->role->contains('name', $role);
+            return $this->role->name == $role;
         }
-        return !! $role->intersect($this->role)->count();
+        return $role->contains('name', $this->role->name);
     }
 
     /**
@@ -64,7 +64,7 @@ class User extends Authenticatable
      */
     public function meterReadings()
     {
-        return $this->hasMany('App\MeterReading', 'user_id', 'id');
+        return $this->hasMany('App\Models\MeterReading', 'user_id', 'id');
     }
 
     /**
@@ -72,6 +72,6 @@ class User extends Authenticatable
      */
     public function role()
     {
-        return $this->hasOne('App\Role', 'role_id', 'role_id');
+        return $this->hasOne('App\Models\Role', 'role_id', 'role_id');
     }
 }

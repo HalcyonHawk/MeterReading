@@ -37,6 +37,6 @@ class Meter extends Model
      */
     public function meterReadings()
     {
-        return $this->hasMany('App\Meterreading', 'meter_reading_id', 'meter_reading_id');
+        return $this->hasMany('App\Models\MeterReading', 'meter_reading_id', 'meter_reading_id');
     }
 }

@@ -39,7 +39,7 @@ class MeterReading extends Model
      */
     public function user()
     {
-        return $this->belongsTo('App\User', 'user_id', 'id');
+        return $this->belongsTo('App\Models\User', 'user_id', 'id');
     }
 
     /**
@@ -47,6 +47,6 @@ class MeterReading extends Model
      */
     public function meter()
     {
-        return $this->belongsTo('App\Meter', 'meter_id', 'meter_id');
+        return $this->belongsTo('App\Models\Meter', 'meter_id', 'meter_id');
     }
 }

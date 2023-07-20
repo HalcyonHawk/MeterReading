@@ -32,8 +32,8 @@ class RolesAndPermissionsSeeder extends Seeder
         $uploadMeterReadingPermId = Permission::insertGetId(['name' => 'upload-meter-reading']);
 
         //Create roles
-        $adminRoleId = Role::insertGetId(['name' => 'admin']);
         $userRoleId = Role::insertGetId(['name' => 'user']);
+        $adminRoleId = Role::insertGetId(['name' => 'admin']);
 
         // Link roles and permissions
         DB::table('permission_role')->insert([
