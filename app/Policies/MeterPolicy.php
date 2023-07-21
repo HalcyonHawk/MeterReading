@@ -21,6 +21,7 @@ class MeterPolicy
     public function viewAny(User $user)
     {
         //Any
+        return true;
     }
 
     /**
@@ -33,6 +34,7 @@ class MeterPolicy
     public function view(User $user, Meter $meter)
     {
         //Any
+        return true;
     }
 
     /**

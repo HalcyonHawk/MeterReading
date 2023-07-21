@@ -6,9 +6,9 @@
 <div class="card">
     <div class="card-header"><h3>Add Meter Reading</h3></div>
     <div class="card-body">
-        <form method="POST" action="{{ route('meter.reading.store', ['meter' => $meterId]) }}">
+        <form method="POST" action="{{ route('meter.reading.store', ['meter' => $meter]) }}">
             @csrf
-            <input type="hidden" name="meter_id" value="{{ $meterId }}">
+            <input type="hidden" name="meter_id" value="{{ $meter->meter_id }}">
             <input type="hidden" name="user_id">
 
             <div class="row mb-3">

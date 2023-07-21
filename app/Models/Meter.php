@@ -29,7 +29,7 @@ class Meter extends Model
      */
     public function getTypeNameAttribute()
     {
-        return ($this->type = 'ELECTRIC') ? 'Electric' : 'Gas';
+        return ($this->type == 'ELECTRIC') ? 'Electric' : 'Gas';
     }
 
     /**

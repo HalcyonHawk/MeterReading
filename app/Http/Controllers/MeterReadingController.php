@@ -23,13 +23,13 @@ class MeterReadingController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create($meterId)
+    public function create($meter)
     {
         $this->authorize('create', MeterReading::class);
 
         $currentDate = today()->toDateString();
 
-        return view('meter.reading.create', ['meterId' => $merterId, 'currentDate' => $currentDate]);
+        return view('meter.reading.create', ['meter' => $merter, 'currentDate' => $currentDate]);
     }
 
     /**
@@ -38,11 +38,11 @@ class MeterReadingController extends Controller
      * @param  \App\Http\Requests\StoreMeterReadingRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreMeterReadingRequest $request, $meterId)
+    public function store(StoreMeterReadingRequest $request, $meter)
     {
         $this->authorize('create', MeterReading::class);
 
-        $estimatedReading = $this->meterReadingService->getEstimatedMeterReading($meterId, $request->date);
+        $estimatedReading = $this->meterReadingService->getEstimatedMeterReading($meter, $request->date);
 
         //Get validated input
         $validated = $request->validate(MeterReading::getValidationRules($estimatedReading));
@@ -53,7 +53,7 @@ class MeterReadingController extends Controller
 
         $meterReading = MeterReading::create($validated);
 
-        return redirect()->route('meter.show', ['meter' => $meterId])
+        return redirect()->route('meter.show', ['meter' => $meter])
             ->with('message', 'Meter reading added');
     }
 
@@ -63,13 +63,13 @@ class MeterReadingController extends Controller
      * @param  \App\Models\MeterReading  $meterReading
      * @return \Illuminate\Http\Response
      */
-    // public function show($meterId, MeterReading $meterReading)
+    // public function show($meter, MeterReading $meterReading)
     // {
     //     $this->authorize('view', MeterReading::class);
 
     //     $meterReading = MeterReading::where('deleted_at', null)->find($meterReading);
 
-    //     return view('meter.reading.show', ['meter' => $meterId, 'meterReading' => $meterReading]);
+    //     return view('meter.reading.show', ['meter' => $meter, 'meterReading' => $meterReading]);
     // }
 
     /**
@@ -78,13 +78,13 @@ class MeterReadingController extends Controller
      * @param  \App\Models\MeterReading  $meterReading
      * @return \Illuminate\Http\Response
      */
-    public function edit($meterId, MeterReading $meterReading)
+    public function edit($meter, MeterReading $meterReading)
     {
-        $this->authorize('update', MeterReading::class);
+        $this->authorize('update', $meterReading);
 
         $meterReading = MeterReading::where('deleted_at', null)->find($meterReading);
 
-        return view('meter.reading.edit', ['meterId' => $meterId, 'meterReading' => $meterReading]);
+        return view('meter.reading.edit', ['meter' => $meter, 'meterReading' => $meterReading]);
     }
 
     /**
@@ -94,19 +94,17 @@ class MeterReadingController extends Controller
      * @param  \App\Models\MeterReading  $meterReading
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateMeterReadingRequest $request, $meterId, MeterReading $meterReading)
+    public function update(UpdateMeterReadingRequest $request, $meter, MeterReading $meterReading)
     {
-        $this->authorize('update', MeterReading::class);
+        $this->authorize('update', $meterReading);
 
-        $meterReading = MeterReading::findOrFail($meterReading);
-
-        $estimatedReading = $this->meterReadingService->getEstimatedMeterReading($meterId, $request->date);
+        $estimatedReading = $this->meterReadingService->getEstimatedMeterReading($meter, $request->date);
 
         $validated = $request->except('_method')->validate(MeterReading::getValidationRules($estimatedReading));
 
         $meterReading->update($validated);
 
-        return redirect()->route('meter.show', ['meter' => $meterId])
+        return redirect()->route('meter.show', ['meter' => $meter])
             ->with('message', 'Meter reading updated');
     }
 
@@ -116,14 +114,13 @@ class MeterReadingController extends Controller
      * @param  \App\Models\MeterReading  $meterReading
      * @return \Illuminate\Http\Response
      */
-    public function destroy($meterId, MeterReading $meterReading)
+    public function destroy($meter, MeterReading $meterReading)
     {
-        $this->authorize('delete', MeterReading::class);
+        $this->authorize('delete', $meterReading);
 
-        $meterReading = MeterReading::findOrFail($meterReading);
         $meterReading->update(['deleted_at' => now()]);
 
-        return redirect()->route('meter.show', ['meter' => $meterId])
+        return redirect()->route('meter.show', ['meter' => $meter])
             ->with('message', 'Meter reading deleted');
     }
 
@@ -133,14 +130,13 @@ class MeterReadingController extends Controller
      * @param  \App\Models\MeterReading  $meterReading
      * @return \Illuminate\Http\Response
      */
-    public function forceDestroy($meterId, MeterReading $meterReading)
+    public function forceDestroy($meter, MeterReading $meterReading)
     {
-        $this->authorize('forceDelete', MeterReading::class);
+        $this->authorize('forceDelete', $meterReading);
 
-        $meterReading = MeterReading::findOrFail($meterReading);
         $meterReading->delete();
 
-        return redirect()->route('meter.show', ['meter' => $meterId])
+        return redirect()->route('meter.show', ['meter' => $meter])
             ->with('message', 'Meter reading permanantly deleted');
     }
 
@@ -153,7 +149,7 @@ class MeterReadingController extends Controller
      */
     public function uploadCSV(Request $request)
     {
-        $this->authorize('upload', MeterReading::class);
+        $this->authorize('upload', $meterReading);
 
         // Retrieve the uploaded CSV file from the request
         $file = $request->file('csv_file');

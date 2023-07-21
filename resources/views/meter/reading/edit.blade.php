@@ -6,12 +6,12 @@
 <div class="card">
     <div class="card-header"><h3>Edit Category</h3></div>
     <div class="card-body">
-        <form method="POST" action="{{ route('meter.reading.update', ['meter' => $meterId, 'reading' => $meterReading->meter_reading_id]) }}">
+        <form method="POST" action="{{ route('meter.reading.update', ['meter' => $meter, 'reading' => $meterReading]) }}">
             @csrf
             <input type="hidden" name="_method" value="PUT">
 
             {{-- TODO: Add dropdown to choose meter if user has update meter permission --}}
-            <input type="hidden" name="meter_id" value="{{ $meterId }}">
+            <input type="hidden" name="meter_id" value="{{ $meter->meter_id }}">
 
             <div class="row mb-3">
                 <label for="reading" class="col-md-4 col-form-label text-md-end">{{ __('Meter Reading Value') }}

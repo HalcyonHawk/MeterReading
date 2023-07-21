@@ -19,14 +19,13 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($meters as $meter)
                     <tr>
-                        <td>>{{ $meter->identifier }}</td>
+                        <td>{{ $meter->identifier }}</td>
                         <td>{{ $meter->installDateFormatted }}</td>
                         <td>{{ $meter->typeName }}</td>
                         <td>{{ $meter->eac }}</td>
 
-                        @can('update', App\Meter::class)
+                        @can('update', $meter)
                         <td><a class="btn btn-primary" href="{{ route('meter.edit', ['meter' => $meter->meter_id])}}">Edit</a></td>
                         @endcan
                         @can('delete', $meter)
@@ -39,12 +38,11 @@
                         </td>
                         @endcan
                     </tr>
-                    @endforeach
                 </tbody>
             </table>
 
             <div class="py-2"></div>
-
+{{--
             <h3>Estimated Meter Reading</h3>
 
             <form action={{ route('meter.estimated', ['meter' => $meter->meter_id]) }}>
@@ -62,19 +60,19 @@
             </form>
 
             <h4>{{ $estimatedMeterReading }}</h4>
-
+ --}}
             <div class="py-2"></div>
 
             {{-- Meter readings for this meter --}}
             <h2>Meter readings</h2>
 
-            @can('create', App\MeterReading::class)
+            @can('create', App\Model\MeterReading::class)
             <a href="{{ route('meter.readng.create', ['meter' => $meter->meter_id]) }}">
                 <button class="btn btn-primary">Add Meter Reading</button>
             </a>
             @endcan
 
-            @can('upload', App\MeterReading::class)
+            @can('upload', $meter)
             {{-- TODO: Add loading bar --}}
             <a href="{{ route('meter.reading.upload', ['meter' => $meter->meter_id]) }}">
                 <button class="btn btn-primary">Upload CSV of Meter Readings</button>
@@ -82,7 +80,7 @@
             @endcan
 
             {{-- Only display meter readings user can view --}}
-            @can('view', App\MeterReading::class)
+            @can('view', $meter)
             @if ($meterReadings->count())
 
             {{-- TODO: Add optional filter by user here --}}
@@ -106,7 +104,7 @@
                         {{-- Name of user that submitted the reading --}}
                         <td>{{ $reading->user->name }}</td>
 
-                        @can('update', App\Meter::class)
+                        @can('update', $meter)
                         <td><a class="btn btn-primary" href="{{ route('meter.reading.edit', [
                             'meter' => $meter->meter_id,
                             'reading' => $reading->meter_reading_id

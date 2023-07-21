@@ -13,7 +13,7 @@ class UpdateMeterRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -25,7 +25,7 @@ class UpdateMeterRequest extends FormRequest
     {
         return [
             'type' => ['required'],
-            'eac' => ['required', 'interger'],
+            'eac' => ['required', 'numeric'],
             'install_date' => ['required', 'date'],
         ];
     }

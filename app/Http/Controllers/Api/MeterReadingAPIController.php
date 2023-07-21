@@ -22,13 +22,13 @@ class MeterReadingAPIController extends Controller
     /**
      * Get estimated meter reading formatted
      *
-     * @param Int $meterId meter the reading belongs to
+     * @param Meter $meter meter the reading belongs to
      *
      * @return JSON Estimated meter reading formatted to JSON
      */
-    public function getEstimatedMeterReading($meterId, $date)
+    public function getEstimatedMeterReading($meter, $date)
     {
-        $estimatedMeterReading = $this->meterReadingService->getEstimatedMeterReading($meterId, $date);
+        $estimatedMeterReading = $this->meterReadingService->getEstimatedMeterReading($meter, $date);
 
         return MeterReadingResource::collection($estimatedMeterReading);
     }

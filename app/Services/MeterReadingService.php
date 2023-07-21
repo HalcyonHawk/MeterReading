@@ -12,17 +12,15 @@ class MeterReadingService
     /**
      * Calculate the estimated meter reading
      *
-     * @param int $meterId
+     * @param Meter $meter
      * @param string $givenDate
      *
      * @return int estimated meter reading
      */
-    public function getEstimatedReading($meterId, $givenDate)
+    public function getEstimatedMeterReading($meter, $givenDate)
     {
-        $meter = Meter::findOrFail($meter);
-
         //Get newest meter reading for given meter that is not deleted
-        $previousReading = MeterReading::where('meter_id', $meterId)
+        $previousReading = MeterReading::where('meter_id', $meter->meter_id)
             ->where('deleted_at', null)
             ->orderBy('date', 'DESC')->first();
 

@@ -11,7 +11,6 @@ use Illuminate\Auth\Access\Response;
 use Illuminate\Support\Facades\Gate;
 use App\Services\MeterReadingService;
 
-
 class MeterController extends Controller
 {
     protected $meterReadingService;
@@ -60,11 +59,13 @@ class MeterController extends Controller
     {
         $this->authorize('create', Meter::class);
 
-        //Get validated input
-        $validated = $request->validate();
-
         //Create meter in database
-        $meter = Meter::create($vaildated);
+        $meter = Meter::create([
+            'identifier' => $request->identifier,
+            'install_date' => $request->install_date,
+            'type' => $request->type,
+            'eac' => $request->eac
+        ]);
 
         //Display page that shows the new meter
         return redirect()->route('meter.show', ['meter' => $meter])
@@ -79,12 +80,10 @@ class MeterController extends Controller
      */
     public function show(Meter $meter)
     {
-        $this->authorize('view', Meter::class);
-
-        $meter = Meter::findOrFail($meter);
+        $this->authorize('view', $meter);
 
         //$meterReadings = MeterReading::where('deleted_at', null)
-        $meterReadings = MeterReading::with('user')->withNoTrashed()
+        $meterReadings = MeterReading::with('user')->where('deleted_at', null)
             ->where('meter_id', $meter->meter_id);
 
         //Filter option if can view any, else can only view their own
@@ -107,7 +106,10 @@ class MeterController extends Controller
         //Seperate results
         $meterReadings->paginate(20);
 
-        $estimatedReading =  $this->meterReadingService->getEstimatedMeterReading($meter, now());
+        $estimatedReading = 0;
+        if ($meterReadings->count()) {
+            $estimatedReading =  $this->meterReadingService->getEstimatedMeterReading($meter, now());
+        }
 
         return view('meter.show', [
             'meter' => $meter,
@@ -124,10 +126,10 @@ class MeterController extends Controller
      */
     public function edit(Meter $meter)
     {
-        $this->authorize('update', Meter::class);
+        $this->authorize('update', $meter);
 
         return view('meter.edit', [
-            'meter' => Meter::findOrFail($meter)
+            'meter' => $meter,
         ]);
     }
 
@@ -140,17 +142,20 @@ class MeterController extends Controller
      */
     public function update(UpdateMeterRequest $request, Meter $meter)
     {
-        $this->authorize('update', Meter::class);
+        $this->authorize('update', $meter);
         // //If user doesn't have permission
         // if (Gate::forUser($user)->denies('update-meter', $meter)) {
         //     // Send back to page with error message
         //     return Response::deny('You must be an administrator.');
         // }
 
-        //Get validated input
-        $validated = $request->validated();
 
-        $meter->update($validated);
+        $meter->update([
+            'identifier' => $request->identifier,
+            'install_date' => $request->install_date,
+            'type' => $request->type,
+            'eac' => $request->eac
+        ]);
 
         return redirect()->route('meter.show', ['meter' => $meter])
             ->with('message', 'Meter reading updated');

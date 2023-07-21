@@ -13,7 +13,7 @@ class StoreMeterRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,9 +24,8 @@ class StoreMeterRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'meter_id' => ['unique:meters'],
             'type' => ['required'],
-            'eac' => ['required', 'interger'],
+            'eac' => ['required', 'numeric'],
             'install_date' => ['required', 'date'],
         ];
     }

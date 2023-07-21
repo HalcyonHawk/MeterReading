@@ -29,7 +29,7 @@
                     <span style="color: #FF0000"> *</span></label>
 
                 <div class="col-md-6">
-                    <input id="install_date" type="date" class="form-control @error('install_date') is-invalid @enderror" name="install_date" value="{{ old('install_date') }}" required>
+                    <input id="install_date" type="date" class="form-control @error('install_date') is-invalid @enderror" name="install_date" value="{{ $currentDate ?? old('install_date') }}" required>
 
                     @error('install_date')
                         <span class="invalid-feedback" role="alert">
@@ -47,7 +47,7 @@
                     <select class="form-control" name="type">
                         {{-- Disabled as this is required --}}
                         <option disabled selected value="null">Unassigned</option>
-                        <option value="ELECTRIC">Eletric</option>
+                        <option value="ELECTRIC">Electric</option>
                         <option value="GAS">Gas</option>
                     </select>
 

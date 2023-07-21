@@ -6,7 +6,7 @@
 <div class="card">
     <div class="card-header"><h3>Edit Meter</h3></div>
     <div class="card-body">
-        <form method="POST" action="{{ route('meter.update', ['meter' => $meter->meter_id]) }}">
+        <form method="POST" action="{{ route('meter.update', ['meter' => $meter]) }}">
             @csrf
             <input type="hidden" name="_method" value="PUT">
 
@@ -46,8 +46,8 @@
 
                 <div class="col-md-6">
                     <select class="form-control" name="type">
-                        <option value="ELECTRIC" @if ($meter->type == 'electric') selected @endif>Eletric</option>
-                        <option value="GAS" @if ($meter->type == 'gas') selected @endif>Gas</option>
+                        <option value="ELECTRIC" @if ($meter->type == 'ELECTRIC') selected @endif>Electric</option>
+                        <option value="GAS" @if ($meter->type == 'GAS') selected @endif>Gas</option>
                     </select>
 
                     @error('type')

@@ -25,8 +25,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('meter/{meter}/reading/force_destroy', 'App\Http\Controllers\MeterReadingController@forceDestroy')->name('force_destroy');
 
     //Resource routes
-    Route::resource('meter', 'App\Http\Controllers\MeterController');
     Route::resource('meter.reading', 'App\Http\Controllers\MeterReadingController')->except('index', 'show');
+    Route::resource('meter', 'App\Http\Controllers\MeterController');
 });
 
 Auth::routes();
