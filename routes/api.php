@@ -17,3 +17,5 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+Route::get('meter/{meter}/estimated', 'MeterReadingAPIController@getEstimatedMeterReading')->name('api.meter.estimated');

@@ -106,15 +106,15 @@ class MeterController extends Controller
         //Seperate results
         $meterReadings->paginate(20);
 
-        $estimatedReading = 0;
+        $estimatedMeterReading = 0;
         if ($meterReadings->count()) {
-            $estimatedReading =  $this->meterReadingService->getEstimatedMeterReading($meter, now());
+            $estimatedMeterReading =  $this->meterReadingService->getEstimatedMeterReading($meter, now());
         }
 
         return view('meter.show', [
             'meter' => $meter,
             'meterReadings' => $meterReadings,
-            'estimatedReading' => $estimatedReading
+            'estimatedMeterReading' => $estimatedMeterReading
         ]);
     }
 

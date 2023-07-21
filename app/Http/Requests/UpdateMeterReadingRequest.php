@@ -7,6 +7,7 @@ use App\Rules\WithinEstimatedRange;
 
 class UpdateMeterReadingRequest extends FormRequest
 {
+    private $estimatedMeterReading;
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -15,6 +16,14 @@ class UpdateMeterReadingRequest extends FormRequest
     public function authorize()
     {
         return true;
+    }
+
+    /**
+     * Set estimated meter reading
+     */
+    public function setEstimatedMeterReading($estimatedMeterReading)
+    {
+        $this->estimatedMeterReading = $estimatedMeterReading;
     }
 
     /**
@@ -27,7 +36,7 @@ class UpdateMeterReadingRequest extends FormRequest
         return [
             'date' => ['required', 'date'],
             //Validate that meter reading being submitted is within 25% of an estimated reading
-            'reading' => ['required', 'numeric', new WithinEstimatedRange($estimatedReading)],
+            'reading' => ['required', 'numeric', new WithinEstimatedRange($this->estimatedMeterReading)],
         ];
     }
 }

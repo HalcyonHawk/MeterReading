@@ -27,10 +27,10 @@ class MeterReading extends Model
     /**
      * Validation rules for meter readings
      */
-    public static function getValidationRules($estimatedReading)
+    public static function getValidationRules($estimatedMeterReading)
     {
         return [
-            'reading' => ['required', 'numeric', new WithinEstimatedRange($estimatedReading)],
+            'reading' => ['required', 'numeric', new WithinEstimatedRange($estimatedMeterReading)],
         ];
     }
 

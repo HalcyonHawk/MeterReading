@@ -26,11 +26,11 @@
                         <td>{{ $meter->eac }}</td>
 
                         @can('update', $meter)
-                        <td><a class="btn btn-primary" href="{{ route('meter.edit', ['meter' => $meter->meter_id])}}">Edit</a></td>
+                        <td><a class="btn btn-primary" href="{{ route('meter.edit', ['meter' => $meter])}}">Edit</a></td>
                         @endcan
                         @can('delete', $meter)
                         <td>
-                            <form action="{{ route('meter.destroy', ['meter' => $meter->meter_id])}}" method="POST">
+                            <form action="{{ route('meter.destroy', ['meter' => $meter])}}" method="POST">
                                 {{ csrf_field() }}
                                 {{ method_field('Delete') }}
                                 <button onclick="return confirm('Are you sure?');" type="submit" class="btn btn-primary">Remove</button>
@@ -42,10 +42,10 @@
             </table>
 
             <div class="py-2"></div>
-{{--
+
             <h3>Estimated Meter Reading</h3>
 
-            <form action={{ route('meter.estimated', ['meter' => $meter->meter_id]) }}>
+            <form action={{ route('api.meter.estimated', ['meter' => $meter]) }}>
                 <div class="form-group">
                     <label for="start_date">Date</label>
 
@@ -60,24 +60,26 @@
             </form>
 
             <h4>{{ $estimatedMeterReading }}</h4>
- --}}
+
             <div class="py-2"></div>
 
             {{-- Meter readings for this meter --}}
             <h2>Meter readings</h2>
 
             @can('create', App\Model\MeterReading::class)
-            <a href="{{ route('meter.readng.create', ['meter' => $meter->meter_id]) }}">
+            <a href="{{ route('meter.reading.create', ['meter' => $meter]) }}">
                 <button class="btn btn-primary">Add Meter Reading</button>
             </a>
             @endcan
 
             @can('upload', $meter)
             {{-- TODO: Add loading bar --}}
-            <a href="{{ route('meter.reading.upload', ['meter' => $meter->meter_id]) }}">
+            <a href="{{ route('meter.reading.upload', ['meter' => $meter]) }}">
                 <button class="btn btn-primary">Upload CSV of Meter Readings</button>
             </a>
             @endcan
+
+            <div class="py-2"></div>
 
             {{-- Only display meter readings user can view --}}
             @can('view', $meter)
@@ -106,15 +108,15 @@
 
                         @can('update', $meter)
                         <td><a class="btn btn-primary" href="{{ route('meter.reading.edit', [
-                            'meter' => $meter->meter_id,
-                            'reading' => $reading->meter_reading_id
+                            'meter' => $meter,
+                            'reading' => $reading
                             ])}}">Edit</a></td>
                         @endcan
                         @can('delete', $reading)
                         <td>
                             <form action="{{ route('meter.reading.destroy', [
-                                'meter' => $meter->meter_id,
-                                'reading' => $reading->meter_reading_id])}}" method="POST">
+                                'meter' => $meter,
+                                'reading' => $reading])}}" method="POST">
                                 {{ csrf_field() }}
                                 {{ method_field('Delete') }}
                                 <button onclick="return confirm('Are you sure?');" type="submit" class="btn btn-primary">Remove</button>
@@ -124,8 +126,8 @@
                         @can('forceDelete', $reading)
                         <td>
                             <form action="{{ route('meter.reading.force_destroy', [
-                                'meter' => $meter->meter_id,
-                                'reading => $reading->meter_reading_id'])}}" method="POST">
+                                'meter' => $meter,
+                                'reading' => $reading])}}" method="POST">
                                 {{ csrf_field() }}
                                 {{ method_field('Delete') }}
                                 <button onclick="return confirm('Are you sure?');" type="submit" class="btn btn-primary">Permanant Delete</button>

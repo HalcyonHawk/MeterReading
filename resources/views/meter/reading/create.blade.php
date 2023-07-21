@@ -8,7 +8,7 @@
     <div class="card-body">
         <form method="POST" action="{{ route('meter.reading.store', ['meter' => $meter]) }}">
             @csrf
-            <input type="hidden" name="meter_id" value="{{ $meter->meter_id }}">
+            <input type="hidden" name="meter_id">
             <input type="hidden" name="user_id">
 
             <div class="row mb-3">
@@ -31,7 +31,7 @@
                     <span style="color: #FF0000"> *</span></label>
 
                 <div class="col-md-6">
-                    <input id="date" type="date" class="form-control @error('date') is-invalid @enderror" name="date" value="{{ old('date') }}" required>
+                    <input id="date" type="date" class="form-control @error('date') is-invalid @enderror" name="date" value="{{ $currentDate ?? old('date') }}" required>
 
                     @error('date')
                         <span class="invalid-feedback" role="alert">

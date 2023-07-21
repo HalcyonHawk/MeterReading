@@ -6,16 +6,16 @@ use Illuminate\Contracts\Validation\Rule;
 
 class WithinEstimatedRange implements Rule
 {
-    protected $estimatedReading;
+    protected $estimatedMeterReading;
 
     /**
      * Create a new rule instance.
      *
      * @return void
      */
-    public function __construct($estimatedReading)
+    public function __construct($estimatedMeterReading)
     {
-        $this->estimatedReading = $estimatedReading;
+        $this->estimatedMeterReading = $estimatedMeterReading;
     }
 
     /**
@@ -28,9 +28,9 @@ class WithinEstimatedRange implements Rule
     public function passes($attribute, $value)
     {
         // Calculate the minimum range
-        $minRange = $this->estimatedReading - ($this->estimatedReading * 0.25);
+        $minRange = $this->estimatedMeterReading - ($this->estimatedMeterReading * 0.25);
         // Calculate the maximum range
-        $maxRange = $this->estimatedReading + ($this->estimatedReading * 0.25);
+        $maxRange = $this->estimatedMeterReading + ($this->estimatedMeterReading * 0.25);
 
         //Pass if bigger than min range, and less than max range
         return ($value >= $minRange) && ($value <= $maxRange);

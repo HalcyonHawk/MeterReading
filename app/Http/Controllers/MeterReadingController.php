@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\MeterReading;
+use App\Models\Meter;
 use App\Http\Requests\StoreMeterReadingRequest;
 use App\Http\Requests\UpdateMeterReadingRequest;
 
@@ -23,13 +24,13 @@ class MeterReadingController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create($meter)
+    public function create(Meter $meter)
     {
         $this->authorize('create', MeterReading::class);
 
         $currentDate = today()->toDateString();
 
-        return view('meter.reading.create', ['meter' => $merter, 'currentDate' => $currentDate]);
+        return view('meter.reading.create', ['meter' => $meter, 'currentDate' => $currentDate]);
     }
 
     /**
@@ -38,15 +39,18 @@ class MeterReadingController extends Controller
      * @param  \App\Http\Requests\StoreMeterReadingRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreMeterReadingRequest $request, $meter)
+    public function store(StoreMeterReadingRequest $request, Meter $meter)
     {
         $this->authorize('create', MeterReading::class);
 
-        $estimatedReading = $this->meterReadingService->getEstimatedMeterReading($meter, $request->date);
+        $estimatedMeterReading = $this->meterReadingService->getEstimatedMeterReading($meter, $request->date);
 
-        //Get validated input
-        $validated = $request->validate(MeterReading::getValidationRules($estimatedReading));
+        //Validate the input
+        $storedMeterRequest = new StoreMeterReadingRequest();
+        $storedMeterRequest->setEstimatedMeterReading($estimatedMeterReading);
+        $validated = $this->validate($storedMeterRequest->rules());
 
+        $validated['meter_id'] = $meter->meter_id;
         //Set user id as the user logged in
         $user = Auth::user();
         $validated['user_id'] = $user->user_id;
@@ -63,7 +67,7 @@ class MeterReadingController extends Controller
      * @param  \App\Models\MeterReading  $meterReading
      * @return \Illuminate\Http\Response
      */
-    // public function show($meter, MeterReading $meterReading)
+    // public function show(Meter $meter, MeterReading $meterReading)
     // {
     //     $this->authorize('view', MeterReading::class);
 
@@ -78,7 +82,7 @@ class MeterReadingController extends Controller
      * @param  \App\Models\MeterReading  $meterReading
      * @return \Illuminate\Http\Response
      */
-    public function edit($meter, MeterReading $meterReading)
+    public function edit(Meter $meter, MeterReading $meterReading)
     {
         $this->authorize('update', $meterReading);
 
@@ -94,13 +98,17 @@ class MeterReadingController extends Controller
      * @param  \App\Models\MeterReading  $meterReading
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateMeterReadingRequest $request, $meter, MeterReading $meterReading)
+    public function update(UpdateMeterReadingRequest $request, Meter $meter, MeterReading $meterReading)
     {
         $this->authorize('update', $meterReading);
 
-        $estimatedReading = $this->meterReadingService->getEstimatedMeterReading($meter, $request->date);
+        $estimatedMeterReading = $this->meterReadingService->getEstimatedMeterReading($meter, $request->date);
 
-        $validated = $request->except('_method')->validate(MeterReading::getValidationRules($estimatedReading));
+        $validated = $request->except('_method');
+
+        $updateMeterRequest = new StoreMeterReadingRequest();
+        $updateMeterRequest->setEstimatedMeterReading($estimatedMeterReading);
+        $validated = $this->validate($updateMeterRequest->rules());
 
         $meterReading->update($validated);
 
@@ -114,7 +122,7 @@ class MeterReadingController extends Controller
      * @param  \App\Models\MeterReading  $meterReading
      * @return \Illuminate\Http\Response
      */
-    public function destroy($meter, MeterReading $meterReading)
+    public function destroy(Meter $meter, MeterReading $meterReading)
     {
         $this->authorize('delete', $meterReading);
 
@@ -130,7 +138,7 @@ class MeterReadingController extends Controller
      * @param  \App\Models\MeterReading  $meterReading
      * @return \Illuminate\Http\Response
      */
-    public function forceDestroy($meter, MeterReading $meterReading)
+    public function forceDestroy(Meter $meter, MeterReading $meterReading)
     {
         $this->authorize('forceDelete', $meterReading);
 
