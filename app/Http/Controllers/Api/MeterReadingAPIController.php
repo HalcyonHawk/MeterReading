@@ -10,6 +10,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Meter;
 
 
 class MeterReadingAPIController extends Controller
@@ -26,10 +27,10 @@ class MeterReadingAPIController extends Controller
      *
      * @return JSON Estimated meter reading formatted to JSON
      */
-    public function getEstimatedMeterReading($meter, $date)
+    public function getEstimatedMeterReading(Request $request, Meter $meter)
     {
-        $estimatedMeterReading = $this->meterReadingService->getEstimatedMeterReading($meter, $date);
+        $estimatedMeterReading = $this->meterReadingService->getEstimatedMeterReading($meter, $request->date);
 
-        return MeterReadingResource::collection($estimatedMeterReading);
+        return EstimatedMeterReadingResource::collection($estimatedMeterReading);
     }
 }

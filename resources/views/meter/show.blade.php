@@ -45,9 +45,10 @@
 
             <h3>Estimated Meter Reading</h3>
 
-            <form action={{ route('api.meter.estimated', ['meter' => $meter]) }}>
+            <form id="estimatedMeterReadingForm" action={{ route('api.meter.estimated', ['meter' => $meter]) }}>
+                @csrf
                 <div class="form-group">
-                    <label for="start_date">Date</label>
+                    <label for="date">Date</label>
 
                     <div class="row">
                         <div class="col-md-6">
@@ -56,10 +57,40 @@
                     </div>
                 </div>
 
-                <button type="submit" class="btn btn-primary">Submit</button>
+                <button id="estimatedMeterReadingBtn" type="submit" class="btn btn-primary">Submit</button>
             </form>
 
-            <h4>{{ $estimatedMeterReading }}</h4>
+            <script>
+                document.getElementById('estimatedMeterReadingBtn').addEventListener('click', function(e) {
+                    //Prevent the default form submission
+                    e.preventDefault();
+
+                    let form = document.getElementById('estimatedMeterReadingForm');
+                    let action = form.getAttribute('action');
+                    let formData = new FormData(form);
+
+                    fetch(action, {
+                        method: 'POST',
+                        body: formData,
+                        headers: {
+                            //AJAX request
+                            'X-Requested-With': 'XMLHttpRequest',
+                            //Pass Laravel CSRF protection
+                            'X-CSRF-TOKEN': document.querySelector('[name="_token"]').value
+                        }
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        // handle the response data here
+                        document.getElementById('estimatedMeterReading').textContent = data.estimated_meter_reading;
+                    })
+                    .catch(error => {
+                        console.error('Error: ', error);
+                    });
+                });
+            </script>
+
+            <h4 id="estimatedMeterReading">{{ $estimatedMeterReading }}</h4>
 
             <div class="py-2"></div>
 
@@ -90,19 +121,17 @@
             <table class="table table-bordered">
                 <thead>
                     <tr>
-                        <th>Identifier (MPXN)</th>
-                        <th>Install Date</th>
-                        <th>Type</th>
-                        <th>Estimated Annual Consumption</th>
+                        <th>Meter Reading</th>
+                        <th>Date</th>
+                        <th>User Name</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach ($meterReadings as $reading)
                     <tr>
-                        <td>{{ $reading->value }}</td>
+                        <td>{{ $reading->reading }}</td>
                         {{-- Attributes --}}
                         <td>{{ $reading->dateFormatted }}</td>
-                        <td>{{ $reading->typeName }}</td>
                         {{-- Name of user that submitted the reading --}}
                         <td>{{ $reading->user->name }}</td>
 

@@ -21,8 +21,8 @@ Route::get('/', function () {
 Route::group(['middleware' => 'auth'], function () {
 
     //Upload csv of meter readings
-    Route::get('meter/{meter}/reading/upload_csv', 'App\Http\Controllers\MeterReadingController@uploadCSV')->name('upload_csv');
-    Route::get('meter/{meter}/reading/force_destroy', 'App\Http\Controllers\MeterReadingController@forceDestroy')->name('force_destroy');
+    Route::get('meter/{meter}/reading/upload_csv', 'App\Http\Controllers\MeterReadingController@uploadCSV')->name('meter.reading.upload_csv');
+    Route::get('meter/{meter}/reading/force_destroy', 'App\Http\Controllers\MeterReadingController@forceDestroy')->name('meter.reading.force_destroy');
 
     //Resource routes
     Route::resource('meter.reading', 'App\Http\Controllers\MeterReadingController')->except('index', 'show');

@@ -10,6 +10,7 @@ use App\Models\User;
 use Illuminate\Auth\Access\Response;
 use Illuminate\Support\Facades\Gate;
 use App\Services\MeterReadingService;
+use Illuminate\Support\Facades\Auth;
 
 class MeterController extends Controller
 {
@@ -99,12 +100,12 @@ class MeterController extends Controller
         } else {
             $meterReadings->where(
                 function ($query) {
-                    $query->where('user_id', Auth::user()->user_id);
+                    $query->where('user_id', Auth::user()->id);
                 }
             );
         }
         //Seperate results
-        $meterReadings->paginate(20);
+        $meterReadings = $meterReadings->orderBy('date')->paginate(20);
 
         $estimatedMeterReading = 0;
         if ($meterReadings->count()) {

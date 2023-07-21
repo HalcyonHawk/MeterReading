@@ -6,9 +6,10 @@ use App\Models\MeterReading;
 use App\Models\Meter;
 use App\Http\Requests\StoreMeterReadingRequest;
 use App\Http\Requests\UpdateMeterReadingRequest;
-
+use Illuminate\Support\Facades\Auth;
 use App\Services\MeterReadingService;
 use App\Jobs\ProcessCSVFile;
+use Illuminate\Http\Request;
 
 class MeterReadingController extends Controller
 {
@@ -39,23 +40,26 @@ class MeterReadingController extends Controller
      * @param  \App\Http\Requests\StoreMeterReadingRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreMeterReadingRequest $request, Meter $meter)
+    public function store(Request $request, Meter $meter)
     {
         $this->authorize('create', MeterReading::class);
 
-        $estimatedMeterReading = $this->meterReadingService->getEstimatedMeterReading($meter, $request->date);
+        $user = Auth::user();
 
         //Validate the input
         $storedMeterRequest = new StoreMeterReadingRequest();
-        $storedMeterRequest->setEstimatedMeterReading($estimatedMeterReading);
-        $validated = $this->validate($storedMeterRequest->rules());
+        $storedMeterRequest->setUser($user);
+        $storedMeterRequest->setMeter($meter);
+        $validated = $storedMeterRequest->validate($storedMeterRequest->rules($request));
 
-        $validated['meter_id'] = $meter->meter_id;
-        //Set user id as the user logged in
-        $user = Auth::user();
-        $validated['user_id'] = $user->user_id;
-
-        $meterReading = MeterReading::create($validated);
+        //Create meter reading for this meter and the user logged in
+        //using the validated data
+        $meterReading = MeterReading::create([
+            'meter_id' => $meter->meter_id,
+            'user_id' => $user->id,
+            'reading' => $validated->reading,
+            'date' => $validated->date
+        ]);
 
         return redirect()->route('meter.show', ['meter' => $meter])
             ->with('message', 'Meter reading added');
@@ -86,7 +90,9 @@ class MeterReadingController extends Controller
     {
         $this->authorize('update', $meterReading);
 
-        $meterReading = MeterReading::where('deleted_at', null)->find($meterReading);
+        if ($meterReading->deleted_at != null) {
+            return redirect()->back();
+        }
 
         return view('meter.reading.edit', ['meter' => $meter, 'meterReading' => $meterReading]);
     }
@@ -102,13 +108,16 @@ class MeterReadingController extends Controller
     {
         $this->authorize('update', $meterReading);
 
+        $user = Auth::user();
+
         $estimatedMeterReading = $this->meterReadingService->getEstimatedMeterReading($meter, $request->date);
 
         $validated = $request->except('_method');
 
         $updateMeterRequest = new StoreMeterReadingRequest();
-        $updateMeterRequest->setEstimatedMeterReading($estimatedMeterReading);
-        $validated = $this->validate($updateMeterRequest->rules());
+        $updateMeterRequest->setUser($user);
+        $updateMeterRequest->setMeter($meter);
+        $validated = $updateMeterRequest->validate($updateMeterRequest->rules());
 
         $meterReading->update($validated);
 

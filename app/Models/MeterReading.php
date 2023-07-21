@@ -19,7 +19,7 @@ class MeterReading extends Model
      * Format date to be displayed
      * TODO: Store UTC in database, convert to users timezone here
      */
-    public function getCreatedDateFormattedAttribute()
+    public function getDateFormattedAttribute()
     {
         return date_format(date_create($this->install_date), 'd/m/Y');
     }

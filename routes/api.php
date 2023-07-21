@@ -18,4 +18,4 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::get('meter/{meter}/estimated', 'MeterReadingAPIController@getEstimatedMeterReading')->name('api.meter.estimated');
+Route::post('meter/{meter}/estimated', 'App\Http\Controllers\Api\MeterReadingAPIController@getEstimatedMeterReading')->name('api.meter.estimated');
